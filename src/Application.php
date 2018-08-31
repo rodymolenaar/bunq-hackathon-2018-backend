@@ -51,8 +51,8 @@ class Application
         }
 
         array_map(function ($controller) {
-            $callable = 'Bunq\DoGood\Controller\\' . $controller['controller'] . ":". $controller['method'];
-            $this->instance->get($controller['path'], $callable);
+            $callable = 'Bunq\DoGood\Controller\\' . $controller['controller'];
+            $this->instance->map($controller['method'], $controller['path'], $callable);
         }, $config['controllers']);
     }
 

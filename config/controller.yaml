@@ -1,5 +1,6 @@
 controllers:
   home:
     path: '/'
-    controller: HelloController
-    method: world
+    controller: HelloController:world
+    method:
+       - GET
