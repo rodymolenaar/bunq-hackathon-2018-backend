@@ -1,0 +1,14 @@
+dependencies:
+  doctrine:
+    dev_mode: true
+    cache_dir: '/var/doctrine'
+    metadata_dirs:
+      - '/src/model'
+    connection:
+      driver: pdo_mysql
+      host: localhost
+      port: 3306
+      dbname: bunq-do-good
+      user: root
+      password: root
+      charset: utf-8

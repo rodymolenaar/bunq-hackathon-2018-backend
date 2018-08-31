@@ -3,11 +3,18 @@
 namespace Bunq\DoGood;
 
 use Slim\App;
+use Slim\Container;
 use Slim\Exception\MethodNotAllowedException;
 use Slim\Exception\NotFoundException;
 
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\Yaml\Yaml;
+
+use Doctrine\ORM\EntityManager;
+use Doctrine\ORM\Tools\Setup;
+use Doctrine\ORM\Mapping\Driver\AnnotationDriver;
+use Doctrine\Common\Annotations\AnnotationReader;
+use Doctrine\Common\Cache\FilesystemCache;
 
 /**
  * Class Application
@@ -34,7 +41,55 @@ class Application
     {
         $this->instance = new \Slim\App($settings);
 
+        $this->loadDependencies();
         $this->loadControllers();
+    }
+
+    /**
+     *
+     * @throws \Exception
+     */
+    private function loadDependencies()
+    {
+        $container = $this->instance->getContainer();
+
+        // load dependencies config
+        $config = $this->loadYamlData('dependencies.yaml');
+
+        if (!isset($config['dependencies'])) {
+            throw new \Exception('Invalid dependencies config');
+        }
+
+        // Doctrine 2 Entity Manager
+        $container['entityManager'] = function (Container $container) use ($config): EntityManager {
+            $metaDataDirs = array_map(function($dir) {
+                return __DIR__ . "../" . $dir;
+            }, $config['dependencies']['doctrine']['metadata_dirs']);
+
+
+            $doctrineConfig = Setup::createAnnotationMetadataConfiguration(
+                $metaDataDirs,
+                $config['dependencies']['doctrine']['dev_mode']
+            );
+
+            $doctrineConfig->setMetadataDriverImpl(
+                new AnnotationDriver(
+                    new AnnotationReader,
+                    $config['dependencies']['doctrine']['metadata_dirs']
+                )
+            );
+
+            $doctrineConfig->setMetadataCacheImpl(
+                new FilesystemCache(
+                     __DIR__ . "../" . $config['dependencies']['doctrine']['cache_dir']
+                )
+            );
+
+            return EntityManager::create(
+                $config['dependencies']['doctrine']['connection'],
+                $doctrineConfig
+            );
+        };
     }
 
     /**

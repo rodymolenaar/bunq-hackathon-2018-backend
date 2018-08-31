@@ -19,4 +19,15 @@ abstract class BaseController
     public function __construct(ContainerInterface $container) {
         $this->container = $container;
     }
+
+    /**
+     * Get service
+     *
+     * @param string $id Identifier of the entry to look for.
+     * @return mixed
+     */
+    protected function get($id)
+    {
+        return $this->container->get($id);
+    }
 }

@@ -18,6 +18,8 @@ class HelloController extends BaseController
      * @return Response
      */
     public function world(Request $request, Response $response, array $args) {
+        $entityManger = $this->get('entityManager');
+        
         return $response->withJson(['status' => 'success', 'message' => "Hello World"]);
     }
 }
