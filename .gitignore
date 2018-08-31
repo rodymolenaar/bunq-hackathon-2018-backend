@@ -2,3 +2,5 @@
 vendor
 *.conf
 _user_scripts
+web/uploads
+charities.json
