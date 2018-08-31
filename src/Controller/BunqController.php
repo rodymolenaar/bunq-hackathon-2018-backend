@@ -1,6 +1,6 @@
 <?php
 
-namespace Bunq\DoGood\controller;
+namespace Bunq\DoGood\Controller;
 
 use Slim\Http\Request;
 use Slim\Http\Response;

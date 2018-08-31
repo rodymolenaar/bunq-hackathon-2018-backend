@@ -2,9 +2,10 @@
 
 namespace Bunq\DoGood\Controller;
 
-use Doctrine\ORM\EntityManager;
 use Slim\Http\Request;
 use Slim\Http\Response;
+
+use Doctrine\ORM\EntityManager;
 
 /**
  * Class HelloController
