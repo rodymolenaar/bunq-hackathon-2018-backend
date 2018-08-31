@@ -1,0 +1,5 @@
+controllers:
+  home:
+    path: '/'
+    controller: HelloController
+    method: world

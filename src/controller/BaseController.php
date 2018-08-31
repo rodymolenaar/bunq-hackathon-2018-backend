@@ -1,0 +1,22 @@
+<?php
+
+namespace Bunq\DoGood\Controller;
+
+use Psr\Container\ContainerInterface;
+
+/**
+ * Class BaseController
+ * @package Bunq\DoGood\controller
+ */
+abstract class BaseController
+{
+    /**
+     * @var ContainerInterface
+     */
+    protected $container;
+
+    // constructor receives container instance
+    public function __construct(ContainerInterface $container) {
+        $this->container = $container;
+    }
+}
