@@ -4,3 +4,8 @@ controllers:
     controller: HelloController:world
     method:
        - GET
+  bunq:
+    path: '/bunq/user'
+    controller: BunqController:currentUser
+    method:
+    - GET

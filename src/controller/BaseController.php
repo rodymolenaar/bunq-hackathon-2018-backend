@@ -3,6 +3,7 @@
 namespace Bunq\DoGood\Controller;
 
 use Psr\Container\ContainerInterface;
+use Slim\Http\Response;
 
 /**
  * Class BaseController
@@ -29,5 +30,20 @@ abstract class BaseController
     protected function get($id)
     {
         return $this->container->get($id);
+    }
+
+    /**
+     * Formatted JSON success response
+     *
+     * @param Response $response
+     * @param array $data
+     *
+     * @return Response
+     */
+    protected function successJsonResponse(Response $response, array $data)
+    {
+        return $response->withJson([
+            'status' => 'success', 'payload' => $data
+        ]);
     }
 }

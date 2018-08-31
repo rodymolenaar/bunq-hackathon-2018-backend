@@ -1,9 +1,9 @@
 dependencies:
   doctrine:
     dev_mode: true
-    cache_dir: '/var/doctrine'
+    cache_dir: 'var/doctrine'
     metadata_dirs:
-      - '/src/model'
+      - 'src/model'
     connection:
       driver: pdo_mysql
       host: localhost

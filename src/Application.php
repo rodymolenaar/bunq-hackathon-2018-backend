@@ -2,6 +2,8 @@
 
 namespace Bunq\DoGood;
 
+use Bunq\DoGood\Dependency\BunqLib;
+use bunq\Util\BunqEnumApiEnvironmentType;
 use Slim\App;
 use Slim\Container;
 use Slim\Exception\MethodNotAllowedException;
@@ -63,7 +65,7 @@ class Application
         // Doctrine 2 Entity Manager
         $container['entityManager'] = function (Container $container) use ($config): EntityManager {
             $metaDataDirs = array_map(function($dir) {
-                return __DIR__ . "../" . $dir;
+                return __DIR__ . "/../" . $dir;
             }, $config['dependencies']['doctrine']['metadata_dirs']);
 
 
@@ -81,7 +83,7 @@ class Application
 
             $doctrineConfig->setMetadataCacheImpl(
                 new FilesystemCache(
-                     __DIR__ . "../" . $config['dependencies']['doctrine']['cache_dir']
+                     __DIR__ . "/../" . $config['dependencies']['doctrine']['cache_dir']
                 )
             );
 
@@ -89,6 +91,11 @@ class Application
                 $config['dependencies']['doctrine']['connection'],
                 $doctrineConfig
             );
+        };
+
+        // Bunq library
+        $container['bunqLib'] = function (Container $container) use ($config): BunqLib {
+            return new BunqLib(BunqEnumApiEnvironmentType::SANDBOX());
         };
     }
 

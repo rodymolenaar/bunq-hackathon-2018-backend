@@ -2,6 +2,7 @@
 
 namespace Bunq\DoGood\Controller;
 
+use Doctrine\ORM\EntityManager;
 use Slim\Http\Request;
 use Slim\Http\Response;
 
@@ -19,7 +20,7 @@ class HelloController extends BaseController
      */
     public function world(Request $request, Response $response, array $args) {
         $entityManger = $this->get('entityManager');
-        
+
         return $response->withJson(['status' => 'success', 'message' => "Hello World"]);
     }
 }

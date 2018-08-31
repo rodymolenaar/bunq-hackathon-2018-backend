@@ -4,3 +4,5 @@ vendor
 _user_scripts
 web/uploads
 web/charities.json
+var/bunq-sandbox.conf
+LocalValetDriver.php
