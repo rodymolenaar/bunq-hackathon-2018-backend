@@ -90,6 +90,14 @@ class Account
     }
 
     /**
+     * @return string
+     */
+    public function getBunqDataString()
+    {
+        return json_encode($this->bunq_data);
+    }
+
+    /**
      * @param mixed $bunq_data
      */
     public function setBunqData($bunq_data): void

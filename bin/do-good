@@ -6,7 +6,6 @@ require_once __DIR__ . '/../vendor/autoload.php';
 $app = new Bunq\DoGood\Application([]);
 $container = $app->getContainer();
 
-
 echo "
 ______        _____                 _ 
 |  _  \      |  __ \               | |
@@ -14,8 +13,7 @@ ______        _____                 _
 | | | / _ \  | | __ / _ \ / _ \ / _` |
 | |/ / (_) | | |_\ \ (_) | (_) | (_| |
 |___/ \___/   \____/\___/ \___/ \__,_|
-                    With Bunq  CLI TOOL              
-                                      
+                    With Bunq  CLI TOOL                                               
 ";
 
 use Doctrine\ORM\Tools\Console\ConsoleRunner;

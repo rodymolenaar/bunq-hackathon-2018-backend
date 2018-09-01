@@ -15,6 +15,11 @@ controllers:
     controller: HelloController:world
     method:
        - GET
+  bank:
+    path: '/bank'
+    controller: HelloController:bank
+    method:
+    - POST
   bunq:
     path: '/bunq/user'
     controller: BunqController:currentUser

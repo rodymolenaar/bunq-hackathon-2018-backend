@@ -76,8 +76,9 @@ class AccountController extends BaseController
         }
 
         // TO DO bunq lib afmaken
-        $apiKey = $postData['api_key'];
-        $account->setBunqData([]);
+        $bunqLib = $this->get('bunqLib');
+        $context = $bunqLib->createContextProduction($postData['api_key']);
+        $account->setBunqData(json_decode($context->toJson()));
 
         $entityManager->merge($account);
         $entityManager->flush();
