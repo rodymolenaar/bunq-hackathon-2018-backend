@@ -10,6 +10,12 @@ controllers:
     method:
       - PATCH
 
+  charities:
+    path: '/charities'
+    controller: CharityController:getList
+    method:
+       - GET
+
   home:
     path: '/'
     controller: HelloController:world
