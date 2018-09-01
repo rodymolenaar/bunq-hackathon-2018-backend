@@ -12,7 +12,7 @@ use bunq\Exception\BadRequestException;
  * Class AccountController
  * @package Bunq\DoGood\Controller
  */
-class AccountController extends BaseController
+final class AccountController extends BaseController
 {
     /**
      * POST: Create Account
@@ -27,8 +27,8 @@ class AccountController extends BaseController
         // ensure username and api_key exist
         $postData = $request->getParsedBody();
 
-        if (!isset($postData['username'])) {
-            return $this->errorJsonResponse($response, "Field 'username' missing");
+        if (!isset($postData['email'])) {
+            return $this->errorJsonResponse($response, "Field 'email' missing");
         }
 
         if (!isset($postData['password'])) {
@@ -37,7 +37,7 @@ class AccountController extends BaseController
 
         // create new account
         $account = new Account();
-        $account->setUsername($postData['username']);
+        $account->setUsername($postData['email']);
         $account->setPasswordHash($postData['password']);
 
         $entityManager = $this->get('entityManager');
@@ -62,8 +62,8 @@ class AccountController extends BaseController
         // ensure username and api_key exist
         $postData = $request->getParsedBody();
 
-        if (!isset($postData['username'])) {
-            return $this->errorJsonResponse($response, "Field 'username' missing");
+        if (!isset($postData['email'])) {
+            return $this->errorJsonResponse($response, "Field 'email' missing");
         }
 
         if (!isset($postData['api_key'])) {
