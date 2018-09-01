@@ -10,6 +10,12 @@ controllers:
     method:
       - PATCH
 
+  merchants:
+    path: '/merchants'
+    controller: MerchantController:getMerchants
+    method:
+      - GET
+
   home:
     path: '/'
     controller: HelloController:world
