@@ -2,8 +2,6 @@
 
 namespace Bunq\DoGood\Controller;
 
-use bunq\Model\Generated\Endpoint\User;
-use bunq\Model\Generated\Endpoint\UserPerson;
 use Slim\Http\Request;
 use Slim\Http\Response;
 

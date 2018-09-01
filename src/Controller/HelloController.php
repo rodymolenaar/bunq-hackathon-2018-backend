@@ -50,6 +50,10 @@ class HelloController extends BaseController
             return $this->errorJsonResponse($response, "Account not found, check username");
         }
 
+        if($account->getBunqDataString() == '""') {
+            return $this->errorJsonResponse($response, "API context missing");
+        }
+
         $bunqLib = $this->get('bunqLib');
         $bunqLib->loadContextFromJson($account->getBunqDataString());
 

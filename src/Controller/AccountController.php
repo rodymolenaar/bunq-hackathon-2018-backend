@@ -2,11 +2,11 @@
 
 namespace Bunq\DoGood\Controller;
 
-use bunq\Exception\BadRequestException;
 use Slim\Http\Request;
 use Slim\Http\Response;
 
 use Bunq\DoGood\Model\Account;
+use bunq\Exception\BadRequestException;
 
 /**
  * Class AccountController
@@ -24,8 +24,7 @@ class AccountController extends BaseController
      * @return Response
      */
     public function createAccount(Request $request, Response $response, array $args) {
-        $entityManager = $this->get('entityManager');
-
+        // ensure username and api_key exist
         $postData = $request->getParsedBody();
 
         if (!isset($postData['username'])) {
@@ -40,8 +39,8 @@ class AccountController extends BaseController
         $account = new Account();
         $account->setUsername($postData['username']);
         $account->setPasswordHash($postData['password']);
-        $account->setBunqData([]);
 
+        $entityManager = $this->get('entityManager');
         $entityManager->persist($account);
         $entityManager->flush();
 
@@ -60,6 +59,7 @@ class AccountController extends BaseController
     public function updateAccount(Request $request, Response $response, array $args) {
         $entityManager = $this->get('entityManager');
 
+        // ensure username and api_key exist
         $postData = $request->getParsedBody();
 
         if (!isset($postData['username'])) {
@@ -70,13 +70,17 @@ class AccountController extends BaseController
             return $this->errorJsonResponse($response, "Field 'api_key' missing");
         }
 
-        /** @var Account $account */
+        /**
+         * fetch user from db (by username)
+         * @var Account $account
+         */
         $account = $entityManager->getRepository('Bunq\DoGood\Model\Account')->findOneBy(['username' => $postData['username']]);
 
         if ($account === null) {
             return $this->errorJsonResponse($response, "Account not found, check username");
         }
 
+        // create api context based on api key
         $bunqLib = $this->get('bunqLib');
 
         try {
@@ -85,6 +89,7 @@ class AccountController extends BaseController
             return $this->errorJsonResponse($response, "API key invalid");
         }
 
+        // save context to account
         $account->setBunqData(json_decode($context->toJson()));
 
         $entityManager->merge($account);
