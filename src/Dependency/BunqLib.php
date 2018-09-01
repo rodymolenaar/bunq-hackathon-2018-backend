@@ -8,6 +8,7 @@ use bunq\Http\Pagination;
 use bunq\Model\Generated\Endpoint\MonetaryAccountBank;
 use bunq\Model\Generated\Endpoint\Payment;
 use bunq\Util\BunqEnumApiEnvironmentType;
+use bunq\Model\Generated\Endpoint\AttachmentPublicContent;
 
 /**
  * Class BunqLib
@@ -85,6 +86,20 @@ class BunqLib
         }
 
         return $output;
+    }
+
+    public function getMerchantImageForTransaction($transactionId) {
+        try {
+            $payment = Payment::get($transactionId)->getValue();
+            $counterpartyAlias = $payment->getCounterpartyAlias();
+            $displayName = $counterpartyAlias->getDisplayName();
+
+            $avatar = $counterpartyAlias->getAvatar()->getImage()[0];
+            
+            return AttachmentPublicContent::listing($avatar->getAttachmentPublicUuid())->getValue();
+        } catch (\Exception $e) {
+            return null;
+        }
     }
 
     private function cardPaymentLocationInArray($array, $cardPayment)

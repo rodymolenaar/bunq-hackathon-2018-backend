@@ -33,6 +33,12 @@ controllers:
     method:
       - GET
 
+  merchant_image:
+    path: '/merchants/{transaction_id}/image'
+    controller: MerchantController:getMerchantImage
+    method:
+      - GET
+
   goal_create:
     path: '/goal'
     controller: GoalController:create
