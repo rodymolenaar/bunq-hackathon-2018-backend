@@ -5,6 +5,7 @@ namespace Bunq\DoGood\Controller;
 use Bunq\DoGood\Model\Account;
 use Bunq\DoGood\Model\Goal;
 
+use bunq\Model\Generated\Object\Amount;
 use Slim\Http\Request;
 use Slim\Http\Response;
 
@@ -71,7 +72,13 @@ final class GoalController extends BaseController
      * @return Response
      */
     public function list(Request $request, Response $response, array $args) {
-        return $this->successJsonResponsePayload($response, []);
+        $entityManager = $this->get('entityManager');
+
+        $goals = $entityManager->getRepository('Bunq\DoGood\Model\Goal')->findBy([
+            'account' => $this->get('user')
+        ]);
+
+        return $this->successJsonResponsePayload($response, $goals);
     }
 
     /**
@@ -84,9 +91,37 @@ final class GoalController extends BaseController
      * @return Response
      */
     public function update(Request $request, Response $response, array $args) {
+        $postData = $request->getParsedBody();
         $id = $args['id'];
 
-        return $this->successJsonResponsePayload($response, []);
+        $goal = $this->getGoalByIdAndAccount($id, $this->get('user'));
+
+        if ($goal === null) {
+            return $this->errorJsonResponse($response, 'User does not have the correct permissions to delete this goal');
+        }
+
+        if (isset($postData['amount']) && $postData['amount'] != $goal->getAmount()) {
+            $goal->setAmount($postData['amount']);
+        }
+
+        if (isset($postData['transaction_id']) && $postData['transaction_id'] != $goal->getTransactionId()) {
+            $goal->setTransactionId($postData['transaction_id']);
+        }
+
+        if (isset($postData['operator']) && $postData['operator'] != $goal->getOperator()) {
+            $goal->setOperator($postData['operator']);
+        }
+
+        if (isset($postData['period']) && $postData['period'] != $goal->getPeriod()) {
+            $goal->setPeriod($postData['period']);
+        }
+
+        // update
+        $entityManager = $this->get('entityManager');
+        $entityManager->merge($goal);
+        $entityManager->flush();
+
+        return $this->successJsonResponseMessage($response, 'Goal updated');
     }
 
     /**
@@ -101,6 +136,33 @@ final class GoalController extends BaseController
     public function delete(Request $request, Response $response, array $args) {
         $id = $args['id'];
 
-        return $this->successJsonResponsePayload($response, []);
+        $goal = $this->getGoalByIdAndAccount($id, $this->get('user'));
+
+        if ($goal === null) {
+            return $this->errorJsonResponse($response, 'User does not have the correct permissions to delete this goal');
+        }
+
+        $entityManager = $this->get('entityManager');
+        $entityManager->remove($goal);
+        $entityManager->flush();
+
+        return $this->successJsonResponseMessage($response, 'Goal deleted');
+    }
+
+    /**
+     * Find an goal instance if account has enough permissions
+     *
+     * @param int $goalId
+     * @param Account $account
+     * @return mixed
+     */
+    private function getGoalByIdAndAccount(int $goalId, Account $account)
+    {
+        $entityManager = $this->get('entityManager');
+
+        return $entityManager->getRepository('Bunq\DoGood\Model\Goal')->findOneBy([
+            'id' => $goalId,
+            'account' => $account
+        ]);
     }
 }

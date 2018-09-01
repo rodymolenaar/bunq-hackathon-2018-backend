@@ -3,13 +3,14 @@
 namespace Bunq\DoGood\Model;
 
 use Doctrine\ORM\Mapping as ORM;
+use JsonSerializable;
 
 /**
  * Class Goals
  * @package Bunq\DoGood\Model
  * @ORM\Entity
  */
-class Goal
+class Goal implements JsonSerializable
 {
     /**
      * Possible operator values
@@ -201,5 +202,23 @@ class Goal
         }
 
         $this->period = $period;
+    }
+
+    /**
+     * Specify data which should be serialized to JSON
+     * @link https://php.net/manual/en/jsonserializable.jsonserialize.php
+     * @return mixed data which can be serialized by <b>json_encode</b>,
+     * which is a value of any type other than a resource.
+     * @since 5.4.0
+     */
+    public function jsonSerialize()
+    {
+        return [
+            'id' => $this->getId(),
+            'operator' => $this->getOperator(),
+            'amount' => $this->getAmount(),
+            'transactionId' => $this->getTransactionId(),
+            'accountId' => $this->getAccount()->getId()
+        ];
     }
 }
