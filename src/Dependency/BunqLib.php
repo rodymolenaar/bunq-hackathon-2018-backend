@@ -144,7 +144,7 @@ final class BunqLib
     private function cardPaymentLocationInArray($array, $cardPayment)
     {
         $compareMethod = function($a, $b) {
-            return $a['name'] == $b['name'] && $a['description'] == $b['description'];
+            return strtolower($a['name']) == strtolower($b['name']) && strtolower($a['description']) == strtolower($b['description']);
         };
 
         return count(array_filter($array, function ($elm) use ($cardPayment, $compareMethod) {
@@ -184,6 +184,6 @@ final class BunqLib
 
     // Returns unique string for merchant name and description combination
     public function paymentToMerchantId($payment): String {
-        return sha1(trim($payment->getCounterpartyAlias()->getDisplayName()) . trim($payment->getDescription()));
+        return sha1(trim(strtolower($payment->getCounterpartyAlias()->getDisplayName())) . trim(strtolower($payment->getDescription())));
     }
 }

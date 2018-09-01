@@ -35,7 +35,6 @@ final class BunqController extends BaseController
 //        $this->logTransaction($payment);
     }
 
-
     private function makePaymentToCharity()
     {
         $pickRandomCharity = function(array $ids) {
