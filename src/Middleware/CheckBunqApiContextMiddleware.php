@@ -11,10 +11,21 @@ class CheckBunqApiContextMiddleware {
     }
 
     public function __invoke($request, $response, $next) {
+        if (!isset($this->container['user'])) {
+            return $next($request, $response);
+        }
+
         $bunqApiContext = $this->container->get('user')->getBunqDataString();
 
-        if (empty($apiContext) || $apiContext == '""') {
-            return $response->withJson(['status' => 'error', 'message' => 'bunq api key not setup'], 412);
+        $skipRoutes = [
+            '/accounts',
+            '/token',
+        ];
+
+        if (!in_array($request->getUri()->getPath(), $skipRoutes)) {
+            if (empty($apiContext) || $apiContext == '""') {
+                return $response->withJson(['status' => 'error', 'message' => 'bunq api key not setup'], 412);
+            }
         }
         
         return $next($request, $response);

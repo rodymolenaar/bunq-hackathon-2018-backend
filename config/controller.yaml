@@ -10,7 +10,7 @@ controllers:
     method:
       - POST
   account_update:
-    path: '/accounts'
+    path: '/account'
     controller: AccountController:updateAccount
     method:
       - PATCH
