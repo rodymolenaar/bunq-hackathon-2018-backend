@@ -4,7 +4,24 @@ namespace Bunq\DoGood\Dependency;
 
 use bunq\Context\ApiContext;
 use bunq\Context\BunqContext;
+use bunq\Exception\BunqException;
+use bunq\Http\Pagination;
+use bunq\Model\Generated\Endpoint\Card;
+use bunq\Model\Generated\Endpoint\MonetaryAccountBank;
+use bunq\Model\Generated\Endpoint\Payment;
+use bunq\Model\Generated\Endpoint\RequestInquiry;
+use bunq\Model\Generated\Endpoint\UserCompany;
+use bunq\Model\Generated\Endpoint\UserLight;
+use bunq\Model\Generated\Endpoint\UserPerson;
+use bunq\Model\Generated\Object\Amount;
+use bunq\Model\Generated\Object\LabelMonetaryAccount;
+use bunq\Model\Generated\Object\NotificationFilter;
+use bunq\Model\Generated\Object\Pointer;
+use bunq\Model\Generated\Endpoint\MonetaryAccount;
+use bunq\Model\Generated\Endpoint\AttachmentPublicContent;
 use bunq\Util\BunqEnumApiEnvironmentType;
+use bunq\Util\InstallationUtil;
+
 /**
  * Class BunqLib
  * @package Bunq\DoGood\Dependency
@@ -21,7 +38,7 @@ class BunqLib
      */
     public function createContextProduction($apiKey = '')
     {
-        $environmentType = BunqEnumApiEnvironmentType::PRODUCTION();
+        $environmentType   = BunqEnumApiEnvironmentType::PRODUCTION();
         $deviceDescription = 'Do Good';
 
         return ApiContext::create(
@@ -44,5 +61,54 @@ class BunqLib
         BunqContext::loadApiContext($apiContext);
 
         return $apiContext;
+    }
+
+    public function getCardPaymentLocations()
+    {
+        $allMonetaryAccount   = MonetaryAccountBank::listing()->getValue();
+        $firstMonetaryAccount = $allMonetaryAccount[0];
+
+        $pagination = new Pagination();
+        $pagination->setCount(200);
+        $payments = Payment::listing(
+            $firstMonetaryAccount->getId(),
+            $pagination->getUrlParamsCountOnly()
+        )->getValue();
+
+        $cardPayments = array_filter($payments, function ($payment) {
+            return $payment->getType() == 'MASTERCARD';
+        });
+
+        $formattedCardPaymentLocations = array_map(function ($cardPayment) {
+            $counterpartyAlias = $cardPayment->getCounterpartyAlias();
+            $avatar            = $counterpartyAlias->getAvatar();
+
+            return [
+                'id'          => $cardPayment->getId(),
+                'name'        => $counterpartyAlias->getDisplayName(),
+                'description' => $cardPayment->getDescription(),
+            ];
+        }, $cardPayments);
+
+        $output = [];
+        foreach ($formattedCardPaymentLocations as $formattedCardPaymentLocation) {
+            if (!$this->cardPaymentLocationInArray($output, $formattedCardPaymentLocation)) {
+                $output[] = $formattedCardPaymentLocation;
+            }
+        }
+
+        return $output;
+    }
+
+    private function cardPaymentLocationInArray($array, $cardPayment)
+    {
+        return count(array_filter($array, function ($elm) use ($cardPayment) {
+            return $this->isSameCardPaymentLocation($cardPayment, $elm);
+        })) > 0;
+    }
+
+    private function isSameCardPaymentLocation($a, $b)
+    {
+        return $a['name'] == $b['name'] && $a['description'] == $b['description'];
     }
 }
