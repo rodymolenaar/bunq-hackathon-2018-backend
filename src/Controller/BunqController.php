@@ -29,28 +29,29 @@ final class BunqController extends BaseController
     public function trigger(Request $request, Response $response, array $args) {
         $data = $request->getParsedBody();
 
-        $this->makePaymentToCharity();
+        if (!$this->makePaymentToCharity()) {
+            return $this->errorJsonResponse($response, "Payment failed, possible no valid charities setup");
+        }
 
-//        $payment = $data['NotificationUrl']['object']['Payment'];
-//        $this->logTransaction($payment);
+        return true;
     }
 
     private function makePaymentToCharity()
     {
-        $pickRandomCharity = function(array $ids) {
-            $index = rand(0, count($ids) - 1);
-            return $ids[$index];
-        };
-
         $entityManager = $this->get('entityManager');
         $account = $entityManager->getRepository('Bunq\DoGood\Model\Account')->findOneBy([
             'email' => 'rickvdl@me.com'
         ]);
 
         $charityIds = $account->getCharityIds();
+        if (count($charityIds) == 0) {
+            return false;
+        }
+
+        $charityId = $charityIds[rand(0, count($charityIds) - 1)];
 
         $charity = $entityManager->getRepository('Bunq\DoGood\Model\Charity')->findOneBy([
-            'id' => $pickRandomCharity($charityIds)
+            'id' => $charityId
         ]);
 
         // make payment
@@ -63,6 +64,8 @@ final class BunqController extends BaseController
             "Do good",
             BunqLib::accountBankId
         )->getValue();
+
+        return true;
     }
 
     /**
