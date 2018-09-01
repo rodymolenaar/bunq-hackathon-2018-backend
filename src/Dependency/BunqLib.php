@@ -155,10 +155,16 @@ final class BunqLib
             $payment = Payment::get($transactionId)->getValue();
             $counterpartyAlias = $payment->getCounterpartyAlias();
             $displayName = $counterpartyAlias->getDisplayName();
+            $avatar = $counterpartyAlias->getAvatar();
 
-            $avatar = $counterpartyAlias->getAvatar()->getImage()[0];
+            if ($avatar) {
+                $images = $avatar->getImage();
+                if (count($images)) {
+                    return AttachmentPublicContent::listing($images[0]->getAttachmentPublicUuid())->getValue();
+                }
+            }
 
-            return AttachmentPublicContent::listing($avatar->getAttachmentPublicUuid())->getValue();
+            return null;
         } catch (\Exception $e) {
             return null;
         }

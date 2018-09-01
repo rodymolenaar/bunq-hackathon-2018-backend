@@ -45,12 +45,12 @@ final class MerchantController extends BaseController
     $bunq = $this->get('bunqLib');
 
     try {
-        $response->withHeader('Content-Type', 'image/png');
+        $imageData = $bunq->getMerchantImageForTransaction($args['transaction_id']);
 
-        $response->write($bunq->getMerchantImageForTransaction($args['transaction_id']));
+        $response->withHeader('Content-Type', 'image/png');
+        $response->write($imageData);
+        
         return $response;
-    } catch (\Exception $e) {
-      die(var_dump($e->getMessage()));
-    }
+    } catch (\Exception $e) {}
   }
 }
