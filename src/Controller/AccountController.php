@@ -37,6 +37,8 @@ final class AccountController extends BaseController
      * @return Response
      */
     public function createAccount(Request $request, Response $response, array $args) {
+        $entityManager = $this->get('entityManager');
+
         // ensure email and api_key exist
         $postData = $request->getParsedBody();
 
@@ -52,12 +54,21 @@ final class AccountController extends BaseController
             return $this->errorJsonResponse($response, 'Password should be 3 or more characters');
         }
 
+        // ensure username isn't taken
+        $existingAccount = $entityManager->getRepository('Bunq\DoGood\Model\Account')->findOneBy([
+            'email' => $postData['email']
+        ]);
+
+        if ($existingAccount !== null) {
+            return $this->errorJsonResponse($response, 'Username already taken');
+        }
+
+
         // create new account
         $account = new Account();
         $account->setEmail($postData['email']);
         $account->setPasswordHash(password_hash($postData['password'], PASSWORD_BCRYPT));
 
-        $entityManager = $this->get('entityManager');
         $entityManager->persist($account);
         $entityManager->flush();
 
