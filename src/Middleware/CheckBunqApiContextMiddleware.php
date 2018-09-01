@@ -18,7 +18,6 @@ class CheckBunqApiContextMiddleware {
         $bunqApiContext = $this->container->get('user')->getBunqDataString();
 
         $skipRoutes = [
-            '/accounts',
             '/account',
             '/token',
             '/bunq/trigger'
