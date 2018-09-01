@@ -25,11 +25,17 @@ final class CharityController extends BaseController
     public function getList(Request $request, Response $response, array $args) {
         $entityManager = $this->get('entityManager');
 
+        $charityIds = $this->get('user')->getCharityIds();
+
         $categories = $entityManager->getRepository('Bunq\DoGood\Model\CharityCategory')->findAll();
-        $data = array_map(function ($category) use ($entityManager) {
+        $data = array_map(function ($category) use ($entityManager, $charityIds) {
             $charities = $entityManager->getRepository('Bunq\DoGood\Model\Charity')->findBy([
                 'category' => $category
             ]);
+
+            $charities = array_map(function($charity) use ($charityIds) {
+                return $charity->jsonSerialize($charityIds);
+            }, $charities);
 
             $categoryData = $category->jsonSerialize();
             $categoryData['charities'] = $charities;

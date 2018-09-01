@@ -132,13 +132,14 @@ final class Charity implements \JsonSerializable
      * which is a value of any type other than a resource.
      * @since 5.4.0
      */
-    public function jsonSerialize()
+    public function jsonSerialize($charityIds = [])
     {
         return [
             'id' => $this->getId(),
             'name' => $this->getName(),
             'iban' => $this->getIban(),
-            'imageUrl' => $this->getImageUrl()
+            'imageUrl' => $this->getImageUrl(),
+            'selected' => (in_array($this->getId(), $charityIds) ? true : false)
         ];
     }
 }
