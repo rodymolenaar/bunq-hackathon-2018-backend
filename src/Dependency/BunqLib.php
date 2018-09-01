@@ -4,23 +4,10 @@ namespace Bunq\DoGood\Dependency;
 
 use bunq\Context\ApiContext;
 use bunq\Context\BunqContext;
-use bunq\Exception\BunqException;
 use bunq\Http\Pagination;
-use bunq\Model\Generated\Endpoint\Card;
 use bunq\Model\Generated\Endpoint\MonetaryAccountBank;
 use bunq\Model\Generated\Endpoint\Payment;
-use bunq\Model\Generated\Endpoint\RequestInquiry;
-use bunq\Model\Generated\Endpoint\UserCompany;
-use bunq\Model\Generated\Endpoint\UserLight;
-use bunq\Model\Generated\Endpoint\UserPerson;
-use bunq\Model\Generated\Object\Amount;
-use bunq\Model\Generated\Object\LabelMonetaryAccount;
-use bunq\Model\Generated\Object\NotificationFilter;
-use bunq\Model\Generated\Object\Pointer;
-use bunq\Model\Generated\Endpoint\MonetaryAccount;
-use bunq\Model\Generated\Endpoint\AttachmentPublicContent;
 use bunq\Util\BunqEnumApiEnvironmentType;
-use bunq\Util\InstallationUtil;
 
 /**
  * Class BunqLib
