@@ -145,7 +145,7 @@ final class BunqLib
     }
 
     /**
-     * Fetch an PNG image for an transaction
+     * Fetch a PNG image for a transaction
      *
      * @param int $transactionId
      * @return null|string
