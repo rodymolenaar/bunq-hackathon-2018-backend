@@ -10,7 +10,7 @@ controllers:
     method:
       - POST
   account_update:
-    path: '/accounts'
+    path: '/account'
     controller: AccountController:updateAccount
     method:
       - PATCH
@@ -30,6 +30,12 @@ controllers:
   merchants:
     path: '/merchants'
     controller: MerchantController:getMerchants
+    method:
+      - GET
+
+  merchant_image:
+    path: '/merchants/{transaction_id}/image'
+    controller: MerchantController:getMerchantImage
     method:
       - GET
 
