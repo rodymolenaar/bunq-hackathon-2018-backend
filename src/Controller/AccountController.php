@@ -100,7 +100,7 @@ final class AccountController extends BaseController
         try {
             $context = $bunqLib->createContextProduction($postData['api_key']);
         } catch(BadRequestException $e) {
-            return $this->errorJsonResponse($response, "API key invalid");
+            return $this->errorJsonResponse($response, "bunq API key invalid");
         }
 
         // save context to account
