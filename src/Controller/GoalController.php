@@ -73,9 +73,27 @@ final class GoalController extends BaseController
     public function list(Request $request, Response $response, array $args) {
         $entityManager = $this->get('entityManager');
 
+        // fetch all goals
         $goals = $entityManager->getRepository('Bunq\DoGood\Model\Goal')->findBy([
             'account' => $this->get('user')
         ]);
+
+        try {
+            $bunq = $this->get('bunqLib');
+            $merchants = $bunq->getCardPaymentLocations();
+        } catch(\Exception $e) {
+            return $this->successJsonResponsePayload($response, $goals);
+        }
+
+        $goals = array_map(function($goal) use ($merchants) {
+            foreach($merchants as $merchant) {
+                if($goal->getMerchantId() == $merchant['id']) {
+                    $goal->setMerchantName($merchant['name']);
+                }
+            }
+
+            return $goal;
+        }, $goals);
 
         return $this->successJsonResponsePayload($response, $goals);
     }

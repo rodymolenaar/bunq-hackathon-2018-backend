@@ -43,6 +43,8 @@ final class Goal implements JsonSerializable
     /** @ORM\Column(type="string") */
     private $merchantId;
 
+    private $merchantName = 'AH 8635';
+
     /** @ORM\ManyToOne(targetEntity="Bunq\DoGood\Model\Account") */
     private $account;
 
@@ -207,6 +209,22 @@ final class Goal implements JsonSerializable
     }
 
     /**
+     * @return string
+     */
+    public function getMerchantName(): string
+    {
+        return $this->merchantName;
+    }
+
+    /**
+     * @param string $merchantName
+     */
+    public function setMerchantName(string $merchantName): void
+    {
+        $this->merchantName = $merchantName;
+    }
+
+    /**
      * Specify data which should be serialized to JSON
      * @link https://php.net/manual/en/jsonserializable.jsonserialize.php
      * @return mixed data which can be serialized by <b>json_encode</b>,
@@ -220,6 +238,7 @@ final class Goal implements JsonSerializable
             'operator' => $this->getOperator(),
             'amount' => $this->getAmount(),
             'merchantId' => $this->getMerchantId(),
+            'merchant_name' => $this->getMerchantName(),
             'accountId' => $this->getAccount()->getId()
         ];
     }
