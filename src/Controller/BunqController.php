@@ -39,7 +39,7 @@ final class BunqController extends BaseController
     }
 
     private function merchantIdFromData($paymentData) {
-        return sha1(trim($paymentData['counterparty_alias']['display_name']) . trim($paymentData['description']));
+        return sha1(trim(strtolower($paymentData['counterparty_alias']['display_name'])) . strtolower(trim($paymentData['description'])));
     }
 
     private function parseAmount($amount) {
