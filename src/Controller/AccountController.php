@@ -46,7 +46,8 @@ final class AccountController extends BaseController
 
         if (!isset($postData['password']) || empty($postData['password'])) {
             return $this->errorJsonResponse($response, "Field 'password' missing or empty");
-
+        }
+        
         if (strlen($postData['password']) < 3) {
             return $this->errorJsonResponse($response, 'Password should be 3 or more characters');
         }
