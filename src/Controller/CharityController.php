@@ -9,7 +9,7 @@ use Slim\Http\Request;
  * Class CharityController
  * @package Bunq\DoGood\Controller
  */
-class CharityController extends BaseController
+final class CharityController extends BaseController
 {
     /**
      * Full list of available

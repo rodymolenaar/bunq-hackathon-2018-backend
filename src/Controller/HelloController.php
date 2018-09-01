@@ -5,6 +5,7 @@ namespace Bunq\DoGood\Controller;
 use bunq\Http\Pagination;
 use bunq\Model\Generated\Endpoint\MonetaryAccountBank;
 use bunq\Model\Generated\Endpoint\Payment;
+
 use Slim\Http\Request;
 use Slim\Http\Response;
 
@@ -12,7 +13,7 @@ use Slim\Http\Response;
  * Class HelloController
  * @package Bunq\DoGood\Controller
  */
-class HelloController extends BaseController
+final class HelloController extends BaseController
 {
     /**
      * Hello world?!

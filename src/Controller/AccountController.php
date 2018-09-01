@@ -12,7 +12,7 @@ use bunq\Exception\BadRequestException;
  * Class AccountController
  * @package Bunq\DoGood\Controller
  */
-class AccountController extends BaseController
+final class AccountController extends BaseController
 {
     /**
      * GET: Get Account
@@ -40,13 +40,12 @@ class AccountController extends BaseController
         // ensure username and api_key exist
         $postData = $request->getParsedBody();
 
-        if (!isset($postData['username']) || empty($postData['username'])) {
+        if (!isset($postData['email']) || empty($postData['email'])) {
             return $this->errorJsonResponse($response, "Field 'username' missing or empty");
         }
 
         if (!isset($postData['password']) || empty($postData['password'])) {
             return $this->errorJsonResponse($response, "Field 'password' missing or empty");
-        }
 
         if (strlen($postData['password']) < 3) {
             return $this->errorJsonResponse($response, 'Password should be 3 or more characters');
@@ -54,7 +53,7 @@ class AccountController extends BaseController
 
         // create new account
         $account = new Account();
-        $account->setUsername($postData['username']);
+        $account->setUsername($postData['email']);
         $account->setPasswordHash(password_hash($postData['password'], PASSWORD_BCRYPT));
 
         $entityManager = $this->get('entityManager');
@@ -79,8 +78,8 @@ class AccountController extends BaseController
         // ensure username and api_key exist
         $postData = $request->getParsedBody();
 
-        if (!isset($postData['username'])) {
-            return $this->errorJsonResponse($response, "Field 'username' missing");
+        if (!isset($postData['email'])) {
+            return $this->errorJsonResponse($response, "Field 'email' missing");
         }
 
         if (!isset($postData['api_key'])) {
