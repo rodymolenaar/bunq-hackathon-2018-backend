@@ -44,12 +44,12 @@ final class GoalController extends BaseController
             return $this->errorJsonResponse($response, "Field 'period' missing or invalid: " . implode(',', Goal::listPeriods()));
         }
 
-        // fetch account by username
-        if (!isset($postData['username'])) {
-            return $this->errorJsonResponse($response, "Field 'username' missing");
+        // fetch account by email
+        if (!isset($postData['email'])) {
+            return $this->errorJsonResponse($response, "Field 'email' missing");
         }
 
-        $account = $this->getAccountByUsername($postData['username']);
+        $account = $this->getAccountByemail($postData['email']);
         if ($account == null) {
             return $this->errorJsonResponse($response, 'user not found');
         }
@@ -115,14 +115,14 @@ final class GoalController extends BaseController
     }
 
     /**
-     * Fetch an account by username
+     * Fetch an account by email
      *
-     * @param string $username
+     * @param string $email
      * @return Account
      */
-    private function getAccountByUsername(string $username)
+    private function getAccountByemail(string $email)
     {
         $entityManager = $this->get('entityManager');
-        return $entityManager->getRepository('Bunq\DoGood\Model\Account')->findOneBy(['username' => $username]);
+        return $entityManager->getRepository('Bunq\DoGood\Model\Account')->findOneBy(['email' => $email]);
     }
 }

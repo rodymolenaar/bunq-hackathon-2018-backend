@@ -24,7 +24,7 @@ final class AccountController extends BaseController
      * @return Response
      */
     public function getAccount(Request $request, Response $response){
-        return $this->successJsonResponseMessage($response, "Username: " . $this->get('user')->getUsername());
+        return $this->successJsonResponseMessage($response, "Email: " . $this->get('user')->getEmail());
     }
 
     /**
@@ -37,11 +37,11 @@ final class AccountController extends BaseController
      * @return Response
      */
     public function createAccount(Request $request, Response $response, array $args) {
-        // ensure username and api_key exist
+        // ensure email and api_key exist
         $postData = $request->getParsedBody();
 
         if (!isset($postData['email']) || empty($postData['email'])) {
-            return $this->errorJsonResponse($response, "Field 'username' missing or empty");
+            return $this->errorJsonResponse($response, "Field 'email' missing or empty");
         }
 
         if (!isset($postData['password']) || empty($postData['password'])) {
@@ -53,7 +53,7 @@ final class AccountController extends BaseController
 
         // create new account
         $account = new Account();
-        $account->setUsername($postData['email']);
+        $account->setEmail($postData['email']);
         $account->setPasswordHash(password_hash($postData['password'], PASSWORD_BCRYPT));
 
         $entityManager = $this->get('entityManager');
@@ -75,7 +75,7 @@ final class AccountController extends BaseController
     public function updateAccount(Request $request, Response $response, array $args) {
         $entityManager = $this->get('entityManager');
 
-        // ensure username and api_key exist
+        // ensure email and api_key exist
         $postData = $request->getParsedBody();
 
         if (!isset($postData['email'])) {
@@ -87,13 +87,13 @@ final class AccountController extends BaseController
         }
 
         /**
-         * fetch user from db (by username)
+         * fetch user from db (by email)
          * @var Account $account
          */
-        $account = $entityManager->getRepository('Bunq\DoGood\Model\Account')->findOneBy(['username' => $postData['username']]);
+        $account = $entityManager->getRepository('Bunq\DoGood\Model\Account')->findOneBy(['email' => $postData['email']]);
 
         if ($account === null) {
-            return $this->errorJsonResponse($response, "Account not found, check username");
+            return $this->errorJsonResponse($response, "Account not found, check email");
         }
 
         // create api context based on api key

@@ -21,7 +21,7 @@ class Account
     /**
      * @ORM\Column(type="string", unique=true, length=255)
      */
-    private $username;
+    private $email;
 
     /**
      * @ORM\Column(type="string", length=255)
@@ -57,17 +57,17 @@ class Account
     /**
      * @return mixed
      */
-    public function getUsername()
+    public function getEmail()
     {
-        return $this->username;
+        return $this->email;
     }
 
     /**
-     * @param mixed $username
+     * @param mixed $email
      */
-    public function setUsername($username): void
+    public function setEmail($email): void
     {
-        $this->username = $username;
+        $this->email = $email;
     }
 
     /**

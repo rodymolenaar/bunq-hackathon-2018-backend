@@ -40,15 +40,15 @@ final class HelloController extends BaseController
     public function bank(Request $request, Response $response, array $args) {
         $postData = $request->getParsedBody();
 
-        if (!isset($postData['username'])) {
-            return $this->errorJsonResponse($response, "Field 'username' missing");
+        if (!isset($postData['email'])) {
+            return $this->errorJsonResponse($response, "Field 'email' missing");
         }
 
         $entityManager = $this->get('entityManager');
-        $account = $entityManager->getRepository('Bunq\DoGood\Model\Account')->findOneBy(['username' => $postData['username']]);
+        $account = $entityManager->getRepository('Bunq\DoGood\Model\Account')->findOneBy(['email' => $postData['email']]);
 
         if ($account === null) {
-            return $this->errorJsonResponse($response, "Account not found, check username");
+            return $this->errorJsonResponse($response, "Account not found, check email");
         }
 
         if($account->getBunqDataString() == '""') {
