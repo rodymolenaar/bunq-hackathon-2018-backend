@@ -9,7 +9,7 @@ use Slim\Http\Response;
  * Class BunqController
  * @package Bunq\DoGood\controller
  */
-class BunqController extends BaseController
+final class BunqController extends BaseController
 {
     /**
      *

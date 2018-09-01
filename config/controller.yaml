@@ -22,6 +22,27 @@ controllers:
     method:
       - GET
 
+  goal_create:
+    path: '/goal'
+    controller: GoalController:create
+    method:
+      - POST
+  goal_list:
+    path: '/goals'
+    controller: GoalController:list
+    method:
+      - GET
+  goal_update:
+    path: '/goals/{id}'
+    controller: GoalController:update
+    method:
+      - PATCH
+  goal_delete:
+    path: '/goals/{id}'
+    controller: GoalController:delete
+    method:
+      - DELETE
+
   home:
     path: '/'
     controller: HelloController:world
