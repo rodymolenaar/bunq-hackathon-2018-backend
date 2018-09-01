@@ -19,7 +19,7 @@ class Account
     private $id;
 
     /**
-     * @ORM\Column(type="string", length=255)
+     * @ORM\Column(type="string", unique=true, length=255)
      */
     private $username;
 
@@ -29,9 +29,9 @@ class Account
     private $password_hash;
 
     /**
-     * @ORM\Column(type="json")
+     * @ORM\Column(type="json", nullable=true)
      */
-    private $bunq_data;
+    private $bunq_data = '';
 
     /**
      * @return mixed
@@ -100,7 +100,7 @@ class Account
     /**
      * @param mixed $bunq_data
      */
-    public function setBunqData($bunq_data): void
+    public function setBunqData(array $bunq_data): void
     {
         $this->bunq_data = $bunq_data;
     }
