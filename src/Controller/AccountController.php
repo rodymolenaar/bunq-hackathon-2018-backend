@@ -108,7 +108,7 @@ class AccountController extends BaseController
         }
 
         // save context to account
-        $account->setBunqData(json_decode($context->toJson()));
+        $account->setBunqData(json_decode($context->toJson(), true));
 
         $entityManager->merge($account);
         $entityManager->flush();

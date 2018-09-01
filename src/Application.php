@@ -171,7 +171,7 @@ class Application
         $this->instance->add(new TokenAuthentication([
             'path' => '/',
             'authenticator' => $authenticator,
-            'header' => 'Api-Token',
+            'header' => 'Authorization',
             'regex' => '/Bearer\s+(.*)$/i',
             'error' => $error,
             'passthrough' => ['/token']

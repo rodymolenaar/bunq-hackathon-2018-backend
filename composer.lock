@@ -1,10 +1,10 @@
 {
     "_readme": [
         "This file locks the dependencies of your project to a known state",
-        "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
+        "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "f38660e5b9b1ffcaedd8955b34bb79fc",
+    "content-hash": "74439d6d91f0efc151b034f50b8d0db7",
     "packages": [
         {
             "name": "bunq/sdk_php",

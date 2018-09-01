@@ -36,7 +36,7 @@ class Account
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
      */
-    private $api_token;
+    private $api_token = '';
 
     /**
      * @return mixed
