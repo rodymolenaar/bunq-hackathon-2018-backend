@@ -30,7 +30,7 @@ final class Goal implements JsonSerializable
     /**
      * @ORM\Id
      * @ORM\GeneratedValue
-     * @ORM\Column(type="integer")
+     * @ORM\Column(type="integer", length=255)
      */
     private $id;
 
@@ -40,8 +40,8 @@ final class Goal implements JsonSerializable
     /** @ORM\Column(type="integer") */
     private $amount;
 
-    /** @ORM\Column(type="integer") */
-    private $transactionId;
+    /** @ORM\Column(type="string") */
+    private $merchantId;
 
     /** @ORM\ManyToOne(targetEntity="Bunq\DoGood\Model\Account") */
     private $account;
@@ -86,6 +86,7 @@ final class Goal implements JsonSerializable
     public static function listPeriods()
     {
         return [
+            self::PERIOD_DAY,
             self::PERIOD_WEEK,
             self::PERIOD_MONTH,
             self::PERIOD_YEAR
@@ -155,17 +156,17 @@ final class Goal implements JsonSerializable
     /**
      * @return mixed
      */
-    public function getTransactionId()
+    public function getMerchantId()
     {
-        return $this->transactionId;
+        return $this->merchantId;
     }
 
     /**
-     * @param mixed $transactionId
+     * @param mixed $merchantId
      */
-    public function setTransactionId($transactionId): void
+    public function setMerchantId($merchantId): void
     {
-        $this->transactionId = $transactionId;
+        $this->merchantId = $merchantId;
     }
 
     /**
@@ -218,7 +219,7 @@ final class Goal implements JsonSerializable
             'id' => $this->getId(),
             'operator' => $this->getOperator(),
             'amount' => $this->getAmount(),
-            'transactionId' => $this->getTransactionId(),
+            'merchantId' => $this->getMerchantId(),
             'accountId' => $this->getAccount()->getId()
         ];
     }

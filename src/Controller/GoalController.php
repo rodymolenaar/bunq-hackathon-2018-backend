@@ -45,21 +45,31 @@ final class GoalController extends BaseController
             return $this->errorJsonResponse($response, "Field 'period' missing or invalid: " . implode(',', Goal::listPeriods()));
         }
 
-        // create new instance
-        $goal = new Goal();
-        $goal->setAccount($this->get('user'));
-        $goal->setAmount((int) $postData['amount']);
-        $goal->setTransactionId((int) $postData['transaction_id']);
-        $goal->setOperator($postData['operator']);
-        $goal->setPeriod($postData['period']);
+        try {
+            $bunq = $this->get('bunqLib');
 
-        // save
-        $entityManager = $this->get('entityManager');
-        $entityManager->persist($goal);
-        $entityManager->flush();
+            $payment = $bunq->getPayment($postData['transaction_id']);
+            $merchantId = $bunq->paymentToMerchantId($payment);
 
+            // create new instance
+            $goal = new Goal();
+            $goal->setAccount($this->get('user'));
+            $goal->setAmount((int) $postData['amount']);
+            $goal->setMerchantId((string) $merchantId);
+            $goal->setOperator($postData['operator']);
+            $goal->setPeriod($postData['period']);
 
-        return $this->successJsonResponseMessage($response, 'Goal created');
+            // save
+            $entityManager = $this->get('entityManager');
+            $entityManager->persist($goal);
+            $entityManager->flush();
+
+            return $this->successJsonResponseMessage($response, 'Goal created');
+        } catch (\Exception $e) {
+            die(var_dump($e->getMessage()));
+        }
+
+        return $this->errorJsonResponse($response, 'Something went wrong while adding the goal');
     }
 
     /**
@@ -104,8 +114,8 @@ final class GoalController extends BaseController
             $goal->setAmount($postData['amount']);
         }
 
-        if (isset($postData['transaction_id']) && $postData['transaction_id'] != $goal->getTransactionId()) {
-            $goal->setTransactionId($postData['transaction_id']);
+        if (isset($postData['transaction_id']) && $postData['transaction_id'] != $goal->getMerchantId()) {
+            $goal->setMerchantId($postData['transaction_id']);
         }
 
         if (isset($postData['operator']) && $postData['operator'] != $goal->getOperator()) {

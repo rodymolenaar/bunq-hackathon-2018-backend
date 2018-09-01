@@ -150,7 +150,7 @@ final class BunqLib
      */
     public function getMerchantImageForTransaction($transactionId) {
         try {
-            $payment = Payment::get($transactionId)->getValue();
+            $payment = $this->getPayment($transactionId);
             $counterpartyAlias = $payment->getCounterpartyAlias();
             $avatar = $counterpartyAlias->getAvatar();
 
@@ -165,5 +165,15 @@ final class BunqLib
         } catch (\Exception $e) {
             return null;
         }
+    }
+
+    // Returns the payment for given ID
+    public function getPayment($id) {
+        return Payment::get($id)->getValue();
+    }
+
+    // Returns unique string for merchant name and description combination
+    public function paymentToMerchantId($payment): String {
+        return sha1(trim($payment->getCounterpartyAlias()->getDisplayName()) . trim($payment->getDescription()));
     }
 }
