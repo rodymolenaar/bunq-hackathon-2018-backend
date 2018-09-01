@@ -178,7 +178,8 @@ class Application
             'header' => 'Authorization',
             'regex' => '/Bearer\s+(.*)$/i',
             'error' => $error,
-            'passthrough' => ['/token']
+            'passthrough' => ['/token'],
+            'secure' => false // behind cloudflare
         ]));
     }
 
