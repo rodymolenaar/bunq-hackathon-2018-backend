@@ -135,15 +135,15 @@ class Application
         return Yaml::parseFile($config[0]);
     }
 
-
     /**
      * Adds the required middlewares to the slim instance
      * @return  void
      */
     private function addMiddlewares() {
 
-        $entityManager = $this->getContainer()->get('entityManager');
-        $authenticator = function($request, TokenAuthentication $tokenAuth) use ($entityManager) {
+        $container = $this->getContainer();
+
+        $authenticator = function($request, TokenAuthentication $tokenAuth) use ($container) {
 
             // Workaround: can't whitelist an endpoint based on HTTP method, so whitelisting POST /accounts would also whitelist GET /accounts and therefore bypassing the token check.
             if ($request->getUri()->getPath() == '/accounts' && $request->getMethod() == 'POST') {
@@ -151,10 +151,14 @@ class Application
             }
 
             // Search for token on header, parameter, cookie or attribute
-            $token = $tokenAuth->findToken($request);   
+            $token = $tokenAuth->findToken($request);
 
             // Find account for token
+            $entityManager = $container->get('entityManager');
             $account = $entityManager->getRepository('Bunq\DoGood\Model\Account')->findOneBy(['api_token' => $token]);
+
+            // dirty hack
+            $container['user'] = $account;
 
             if (!$account) {
                 $tokenAuth->setResponseMessage('Invalid token');

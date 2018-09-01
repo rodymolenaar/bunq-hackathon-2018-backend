@@ -23,9 +23,8 @@ class AccountController extends BaseController
      *
      * @return Response
      */
-    public function getAccount(Request $request, Response $response) {
-
-        die(var_dump($request->getAttribute('test')));
+    public function getAccount(Request $request, Response $response){
+        return $this->successJsonResponseMessage($response, "Username: " . $this->get('user')->getUsername());
     }
 
     /**
