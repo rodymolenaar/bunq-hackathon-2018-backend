@@ -2,6 +2,7 @@
 
 namespace Bunq\DoGood\Controller;
 
+use bunq\Exception\BadRequestException;
 use Slim\Http\Request;
 use Slim\Http\Response;
 
@@ -44,7 +45,7 @@ class AccountController extends BaseController
         $entityManager->persist($account);
         $entityManager->flush();
 
-        return $this->successJsonResponse($response, []);
+        return $this->successJsonResponseMessage($response, 'Account created');
     }
 
     /**
@@ -69,20 +70,26 @@ class AccountController extends BaseController
             return $this->errorJsonResponse($response, "Field 'api_key' missing");
         }
 
+        /** @var Account $account */
         $account = $entityManager->getRepository('Bunq\DoGood\Model\Account')->findOneBy(['username' => $postData['username']]);
 
         if ($account === null) {
             return $this->errorJsonResponse($response, "Account not found, check username");
         }
 
-        // TO DO bunq lib afmaken
         $bunqLib = $this->get('bunqLib');
-        $context = $bunqLib->createContextProduction($postData['api_key']);
+
+        try {
+            $context = $bunqLib->createContextProduction($postData['api_key']);
+        } catch(BadRequestException $e) {
+            return $this->errorJsonResponse($response, "API key invalid");
+        }
+
         $account->setBunqData(json_decode($context->toJson()));
 
         $entityManager->merge($account);
         $entityManager->flush();
 
-        return $this->successJsonResponse($response, []);
+        return $this->successJsonResponseMessage($response, 'Account updated with bunq API context');
     }
 }

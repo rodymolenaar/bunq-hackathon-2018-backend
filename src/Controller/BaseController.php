@@ -40,10 +40,25 @@ abstract class BaseController
      *
      * @return Response
      */
-    protected function successJsonResponse(Response $response, array $data)
+    protected function successJsonResponsePayload(Response $response, array $data)
     {
         return $response->withJson([
             'status' => 'success', 'payload' => $data
+        ]);
+    }
+
+    /**
+     * Formatted JSON success response
+     *
+     * @param Response $response
+     * @param string $message
+     *
+     * @return Response
+     */
+    protected function successJsonResponseMessage(Response $response, string $message)
+    {
+        return $response->withJson([
+            'status' => 'success', 'message' => $message
         ]);
     }
 

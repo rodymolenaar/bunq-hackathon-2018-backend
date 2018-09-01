@@ -24,7 +24,7 @@ class HelloController extends BaseController
      * @return Response
      */
     public function world(Request $request, Response $response, array $args) {
-        return $response->withJson(['status' => 'success', 'message' => "Hello World"]);
+        return $this->successJsonResponseMessage($response, "Hello World");
     }
 
     /**
@@ -63,6 +63,6 @@ class HelloController extends BaseController
             $pagination->getUrlParamsCountOnly()
         )->getValue();
 
-       return $this->successJsonResponse($response, $transactions);
+       return $this->successJsonResponsePayload($response, $transactions);
     }
 }

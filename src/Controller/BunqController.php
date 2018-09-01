@@ -2,6 +2,8 @@
 
 namespace Bunq\DoGood\Controller;
 
+use bunq\Model\Generated\Endpoint\User;
+use bunq\Model\Generated\Endpoint\UserPerson;
 use Slim\Http\Request;
 use Slim\Http\Response;
 
@@ -12,6 +14,8 @@ use Slim\Http\Response;
 class BunqController extends BaseController
 {
     /**
+     *
+     *
      * @param Request $request
      * @param Response $response
      * @param array $args
@@ -21,7 +25,7 @@ class BunqController extends BaseController
         $bunq = $this->get('bunqLib');
         $user = $bunq->getCurrentUser();
 
-        return $this->successJsonResponse($response, [
+        return $this->successJsonResponsePayload($response, [
             'id' => $user->getId(),
             'name' => $user->getDisplayName()
         ]);

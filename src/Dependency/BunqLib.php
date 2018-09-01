@@ -12,6 +12,13 @@ use bunq\Util\BunqEnumApiEnvironmentType;
 class BunqLib
 {
 
+    /**
+     * Create an Bunq API context, used to store auth info
+     *
+     * @param string $apiKey
+     *
+     * @return ApiContext
+     */
     public function createContextProduction($apiKey = '')
     {
         $environmentType = BunqEnumApiEnvironmentType::PRODUCTION();
@@ -25,6 +32,12 @@ class BunqLib
         );
     }
 
+    /**
+     * Parse json data to Api context
+     *
+     * @param string $json
+     * @return ApiContext
+     */
     public function loadContextFromJson(string $json)
     {
         $apiContext = ApiContext::fromJson($json);
