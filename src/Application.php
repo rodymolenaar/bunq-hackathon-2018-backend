@@ -3,7 +3,6 @@
 namespace Bunq\DoGood;
 
 use Bunq\DoGood\Dependency\BunqLib;
-use bunq\Util\BunqEnumApiEnvironmentType;
 
 use Slim\App;
 use Slim\Container;
@@ -98,7 +97,9 @@ class Application
 
         // Bunq library
         $container['bunqLib'] = function (Container $container) use ($config): BunqLib {
-            return new BunqLib(BunqEnumApiEnvironmentType::SANDBOX());
+            $bungLib = new BunqLib();
+            $bungLib->loadContextFromJson($container['user']->getBunqDataString());
+            return $bungLib;
         };
     }
 

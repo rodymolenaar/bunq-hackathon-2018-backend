@@ -38,10 +38,7 @@ final class HelloController extends BaseController
      * @return Response
      */
     public function bank(Request $request, Response $response, array $args) {
-        $postData = $request->getParsedBody();
-
         $bunqLib = $this->get('bunqLib');
-        $bunqLib->loadContextFromJson($this->get('user')->getBunqDataString());
 
         $allMonetaryAccount = MonetaryAccountBank::listing()->getValue();
         $betaal = $allMonetaryAccount[0];
