@@ -108,9 +108,10 @@ final class BunqLib
             $counterpartyAlias = $cardPayment->getCounterpartyAlias();
 
             return [
-                'transaction_id'    => $cardPayment->getId(),
+                'id'    => $this->paymentToMerchantId($cardPayment),
                 'name'              => $counterpartyAlias->getDisplayName(),
                 'description'       => $cardPayment->getDescription(),
+                'image_url' => 'https://bunq-api.testservers.nl/merchants/' . $cardPayment->getId() . '/image'
             ];
         }, $cardPayments);
 
