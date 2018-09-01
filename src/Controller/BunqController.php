@@ -23,6 +23,11 @@ final class BunqController extends BaseController
     public function trigger(Request $request, Response $response, array $args) {
         $bunq = $this->get('bunqLib');
 
-        return $this->successJsonResponsePayload($response, []);
+        $path = realpath(__DIR__ . "/../../var/trigger.txt");
+
+        $input = fopen("php://input", "r+");
+        file_put_contents($path, $input);
+
+        return $this->successJsonResponseMessage($response, 'Success');
     }
 }
