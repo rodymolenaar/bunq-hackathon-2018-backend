@@ -120,4 +120,32 @@ final class AccountController extends BaseController
 
         return $this->successJsonResponseMessage($response, 'Account updated with bunq API context');
     }
+
+    /**
+     * PATCH: Update account charity info
+     *
+     * @param Request $request
+     * @param Response $response
+     * @param array $args
+     *
+     * @return Response
+     */
+    public function updateAccountCharity(Request $request, Response $response, array $args) {
+        $entityManager = $this->get('entityManager');
+
+        // ensure api_key exist
+        $postData = $request->getParsedBody();
+
+        if (!isset($postData['charities']) && !is_array($postData['charities'])) {
+            return $this->errorJsonResponse($response, "Field 'charities' missing");
+        }
+
+        $account = $this->get('user');
+        $account->setCharityIds($postData['charities']);
+
+        $entityManager->merge($account);
+        $entityManager->flush();
+
+        return $this->successJsonResponseMessage($response, 'Account updated with charity info');
+    }
 }

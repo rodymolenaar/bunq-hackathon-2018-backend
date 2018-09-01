@@ -29,6 +29,11 @@ final class Account
     private $password_hash;
 
     /**
+     * @ORM\Column(type="json")
+     */
+    private $charityIds = '';
+
+    /**
      * @ORM\Column(type="json", nullable=true)
      */
     private $bunq_data = '';
@@ -84,6 +89,22 @@ final class Account
     public function setPasswordHash($password_hash): void
     {
         $this->password_hash = $password_hash;
+    }
+
+    /**
+     * @return array
+     */
+    public function getCharityIds()
+    {
+        return json_decode($this->charityIds, true);
+    }
+
+    /**
+     * @param array $charityIds
+     */
+    public function setCharityIds($charityIds): void
+    {
+        $this->charityIds = json_encode($charityIds);
     }
 
     /**
