@@ -33,12 +33,12 @@ final class GoalController extends BaseController
             return $this->errorJsonResponse($response, "Field 'amount' missing");
         }
 
-        if (!isset($postData['transaction_id'])) {
-            return $this->errorJsonResponse($response, "Field 'transaction_id' missing");
+        if (!isset($postData['merchant_id'])) {
+            return $this->errorJsonResponse($response, "Field 'merchant_id' missing");
         }
 
         if (!isset($postData['operator']) || !Goal::isValidOperator($postData['operator'])) {
-            return $this->errorJsonResponse($response, "Field 'condition' missing or invalid: " . implode(',', Goal::listOperators()));
+            return $this->errorJsonResponse($response, "Field 'operator' missing or invalid: " . implode(',', Goal::listOperators()));
         }
 
         if (!isset($postData['period']) || !Goal::isValidPeriod($postData['period'])) {
@@ -49,7 +49,7 @@ final class GoalController extends BaseController
         $goal = new Goal();
         $goal->setAccount($this->get('user'));
         $goal->setAmount((int) $postData['amount']);
-        $goal->setTransactionId((int) $postData['transaction_id']);
+        $goal->setMerchantId((string) $postData['merchant_id']);
         $goal->setOperator($postData['operator']);
         $goal->setPeriod($postData['period']);
 
@@ -57,7 +57,6 @@ final class GoalController extends BaseController
         $entityManager = $this->get('entityManager');
         $entityManager->persist($goal);
         $entityManager->flush();
-
 
         return $this->successJsonResponseMessage($response, 'Goal created');
     }
@@ -104,8 +103,8 @@ final class GoalController extends BaseController
             $goal->setAmount($postData['amount']);
         }
 
-        if (isset($postData['transaction_id']) && $postData['transaction_id'] != $goal->getTransactionId()) {
-            $goal->setTransactionId($postData['transaction_id']);
+        if (isset($postData['transaction_id']) && $postData['transaction_id'] != $goal->getMerchantId()) {
+            $goal->setMerchantId($postData['transaction_id']);
         }
 
         if (isset($postData['operator']) && $postData['operator'] != $goal->getOperator()) {
