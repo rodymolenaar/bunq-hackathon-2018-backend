@@ -46,4 +46,23 @@ abstract class BaseController
             'status' => 'success', 'payload' => $data
         ]);
     }
+
+    /**
+     * Formatted JSON error response
+     *
+     * @param Response $response
+     * @param string $message
+     * @param int $statusCode
+     *
+     * @return Response
+     */
+    protected function errorJsonResponse(Response $response, string $message, int $statusCode = 400)
+    {
+        $response = $response->withHeader('Content-type', 'application/json');
+        $response = $response->withStatus($statusCode);
+
+        return $response->withJson([
+            'status' => 'error', 'message' => $message
+        ]);
+    }
 }

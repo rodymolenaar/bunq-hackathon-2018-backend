@@ -11,4 +11,4 @@ dependencies:
       dbname: bunq-do-good
       user: root
       password: root
-      charset: utf-8
+      charset: utf8

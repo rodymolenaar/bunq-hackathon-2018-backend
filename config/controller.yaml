@@ -1,4 +1,15 @@
 controllers:
+  account_create:
+    path: '/accounts'
+    controller: AccountController:createAccount
+    method:
+      - POST
+  account_update:
+    path: '/accounts'
+    controller: AccountController:updateAccount
+    method:
+      - PATCH
+
   home:
     path: '/'
     controller: HelloController:world
