@@ -145,6 +145,11 @@ class Application
         $entityManager = $this->getContainer()->get('entityManager');
         $authenticator = function($request, TokenAuthentication $tokenAuth) use ($entityManager) {
 
+            // Workaround: can't whitelist an endpoint based on HTTP method, so whitelisting POST /accounts would also whitelist GET /accounts and therefore bypassing the token check.
+            if ($request->getUri()->getPath() == '/accounts' && $request->getMethod() == 'POST') {
+                return true;
+            }
+
             // Search for token on header, parameter, cookie or attribute
             $token = $tokenAuth->findToken($request);   
 
@@ -168,7 +173,8 @@ class Application
             'authenticator' => $authenticator,
             'header' => 'Api-Token',
             'regex' => '/Bearer\s+(.*)$/i',
-            'error' => $error
+            'error' => $error,
+            'passthrough' => ['/token']
         ]));
     }
 

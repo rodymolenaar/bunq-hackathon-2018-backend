@@ -15,6 +15,20 @@ use bunq\Exception\BadRequestException;
 class AccountController extends BaseController
 {
     /**
+     * GET: Get Account
+     *
+     * @param Request $request
+     * @param Response $response
+     * @param array $args
+     *
+     * @return Response
+     */
+    public function getAccount(Request $request, Response $response) {
+
+        die(var_dump($request->getAttribute('test')));
+    }
+
+    /**
      * POST: Create Account
      *
      * @param Request $request
@@ -27,18 +41,22 @@ class AccountController extends BaseController
         // ensure username and api_key exist
         $postData = $request->getParsedBody();
 
-        if (!isset($postData['username'])) {
-            return $this->errorJsonResponse($response, "Field 'username' missing");
+        if (!isset($postData['username']) || empty($postData['username'])) {
+            return $this->errorJsonResponse($response, "Field 'username' missing or empty");
         }
 
-        if (!isset($postData['password'])) {
-            return $this->errorJsonResponse($response, "Field 'password' missing");
+        if (!isset($postData['password']) || empty($postData['password'])) {
+            return $this->errorJsonResponse($response, "Field 'password' missing or empty");
+        }
+
+        if (strlen($postData['password']) < 3) {
+            return $this->errorJsonResponse($response, 'Password should be 3 or more characters');
         }
 
         // create new account
         $account = new Account();
         $account->setUsername($postData['username']);
-        $account->setPasswordHash($postData['password']);
+        $account->setPasswordHash(password_hash($postData['password'], PASSWORD_BCRYPT));
 
         $entityManager = $this->get('entityManager');
         $entityManager->persist($account);
