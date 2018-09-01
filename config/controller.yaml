@@ -14,6 +14,11 @@ controllers:
     controller: AccountController:updateAccount
     method:
       - PATCH
+  account_charity_update:
+    path: '/account/charities'
+    controller: AccountController:updateAccountCharity
+    method:
+      - PATCH
 
   token_post:
     path: '/token'

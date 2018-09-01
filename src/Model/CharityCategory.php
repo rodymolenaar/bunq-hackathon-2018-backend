@@ -27,8 +27,8 @@ final class CharityCategory implements JsonSerializable
     private $name;
 
     /**
-     * @OneToMany(targetEntity="Bunq\DoGood\Model\Charity", mappedBy="category")
-     * @JoinColumn(name="category_id", referencedColumnName="id")
+     * @ORM\OneToMany(targetEntity="Bunq\DoGood\Model\Charity", mappedBy="category")
+     * @ORM\JoinColumn(name="category_id", referencedColumnName="id")
      */
     private $charities;
 
