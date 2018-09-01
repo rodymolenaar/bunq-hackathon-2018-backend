@@ -96,7 +96,7 @@ final class Account
      */
     public function getCharityIds()
     {
-        return json_decode($this->charityIds, true);
+        return $this->charityIds;
     }
 
     /**
@@ -104,7 +104,7 @@ final class Account
      */
     public function setCharityIds($charityIds): void
     {
-        $this->charityIds = json_encode($charityIds);
+        $this->charityIds = $charityIds;
     }
 
     /**

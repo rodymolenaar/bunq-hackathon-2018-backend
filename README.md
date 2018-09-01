@@ -9,5 +9,6 @@ Authors:
  
 ```bash
 composer install
+rm -rf ./var/doctrine/*
 php ./bin/do-good orm:schema-tool:update --force
 ```

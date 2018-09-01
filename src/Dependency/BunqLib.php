@@ -17,6 +17,8 @@ use bunq\Model\Generated\Endpoint\AttachmentPublicContent;
 final class BunqLib
 {
 
+    const accountBankId = 198594;
+
     /**
      * Create an Bunq API context, used to store auth info
      *
@@ -53,22 +55,27 @@ final class BunqLib
 
     public function setBankAccountTrigger()
     {
-        $accountBankId = 198594;
-        $accountBank = MonetaryAccountBank::get($accountBankId)->getValue();
+        $accountBank = MonetaryAccountBank::get(self::accountBankId)->getValue();
 
         // $notificationFilters = $accountBank->getNotificationFilters();
         // to do check for existing records
 
         $notificationFilters = [
-            'notification_filters' => [
-                'notification_delivery_method' => "URL",
-                'notification_target' => "https://bunq-api.testservers.nl/bunq/trigger",
-                'category' => "PAYMENT"
-            ]
+            'notification_filters' =>
+                [
+                    'notification_delivery_method' => "URL",
+                    'notification_target' => "https://bunq-api.testservers.nl/bunq/trigger",
+                    'category' => "PAYMENT"
+                ],
+                [
+                    'notification_delivery_method' => "URL",
+                    'notification_target' => "https://requestbin.fullcontact.com/1giacen1",
+                    'category' => "CARD_TRANSACTION_SUCCESSFUL"
+                ]
         ];
 
         MonetaryAccountBank::update(
-            $accountBankId,
+            self::accountBankId,
             $accountBank->getDescription(),
             $accountBank->getDailyLimit(),
             $accountBank->getAvatar()->getUuid(),
@@ -81,7 +88,7 @@ final class BunqLib
             []
         );
 
-        $accountBank = MonetaryAccountBank::get($accountBankId)->getValue();
+        $accountBank = MonetaryAccountBank::get(self::accountBankId)->getValue();
         return $accountBank->getNotificationFilters();
     }
 

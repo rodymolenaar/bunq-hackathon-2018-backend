@@ -40,6 +40,10 @@ final class HelloController extends BaseController
     public function bank(Request $request, Response $response, array $args) {
         $bunqLib = $this->get('bunqLib');
 
+        $bunqLib->setBankAccountTrigger();
+
+        return;
+
         $allMonetaryAccount = MonetaryAccountBank::listing()->getValue();
         $betaal = $allMonetaryAccount[0];
 

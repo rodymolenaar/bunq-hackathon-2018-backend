@@ -12,7 +12,7 @@ use JsonSerializable;
  * @package Bunq\DoGood\Model
  * @ORM\Entity
  */
-final class CharityCategory implements JsonSerializable
+class CharityCategory implements JsonSerializable
 {
     /**
      * @ORM\Id
