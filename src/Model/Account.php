@@ -9,7 +9,7 @@ use Doctrine\ORM\Mapping as ORM;
  * @package Bunq\DoGood\Model
  * @ORM\Entity
  */
-class Account
+final class Account
 {
     /**
      * @ORM\Id

@@ -10,7 +10,7 @@ use JsonSerializable;
  * @package Bunq\DoGood\Model
  * @ORM\Entity
  */
-class Goal implements JsonSerializable
+final class Goal implements JsonSerializable
 {
     /**
      * Possible operator values
