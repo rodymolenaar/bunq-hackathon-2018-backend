@@ -21,6 +21,7 @@ class CheckBunqApiContextMiddleware {
             '/accounts',
             '/account',
             '/token',
+            '/bunq/trigger'
         ];
 
         if (!in_array($request->getUri()->getPath(), $skipRoutes)) {

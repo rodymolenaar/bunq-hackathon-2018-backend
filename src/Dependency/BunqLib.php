@@ -51,10 +51,7 @@ final class BunqLib
         return $apiContext;
     }
 
-    /**
-     * @param string $url
-     */
-    public function setBankAccountTrigger(string $url)
+    public function setBankAccountTrigger()
     {
         $accountBankId = 198594;
         $accountBank = MonetaryAccountBank::get($accountBankId)->getValue();
@@ -63,9 +60,11 @@ final class BunqLib
         // to do check for existing records
 
         $notificationFilters = [
-            'notification_delivery_method' => "https://bunq-api.testservers.nl/bunq/trigger",
-            'notification_target' => $url,
-            'category' => "PAYMENT"
+            'notification_filters' => [
+                'notification_delivery_method' => "URL",
+                'notification_target' => "https://bunq-api.testservers.nl/bunq/trigger",
+                'category' => "PAYMENT"
+            ]
         ];
 
         MonetaryAccountBank::update(
@@ -81,6 +80,9 @@ final class BunqLib
             $accountBank->getSetting(),
             []
         );
+
+        $accountBank = MonetaryAccountBank::get($accountBankId)->getValue();
+        return $accountBank->getNotificationFilters();
     }
 
     /**
