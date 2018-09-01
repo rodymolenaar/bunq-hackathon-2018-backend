@@ -65,11 +65,6 @@ final class BunqLib
                 [
                     'notification_delivery_method' => "URL",
                     'notification_target' => "https://bunq-api.testservers.nl/bunq/trigger",
-                    'category' => "PAYMENT"
-                ],
-                [
-                    'notification_delivery_method' => "URL",
-                    'notification_target' => "https://requestbin.fullcontact.com/1giacen1",
                     'category' => "CARD_TRANSACTION_SUCCESSFUL"
                 ]
         ];
