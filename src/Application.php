@@ -147,4 +147,10 @@ class Application
             dump($e);
         }
     }
+
+    public function getContainer()
+    {
+        return $this->instance->getContainer();
+    }
+
 }
