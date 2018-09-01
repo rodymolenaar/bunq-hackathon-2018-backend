@@ -106,7 +106,6 @@ final class BunqLib
 
         $formattedCardPaymentLocations = array_map(function ($cardPayment) {
             $counterpartyAlias = $cardPayment->getCounterpartyAlias();
-            $avatar            = $counterpartyAlias->getAvatar();
 
             return [
                 'transaction_id'    => $cardPayment->getId(),
@@ -153,7 +152,6 @@ final class BunqLib
         try {
             $payment = Payment::get($transactionId)->getValue();
             $counterpartyAlias = $payment->getCounterpartyAlias();
-            $displayName = $counterpartyAlias->getDisplayName();
             $avatar = $counterpartyAlias->getAvatar();
 
             if ($avatar) {
