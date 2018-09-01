@@ -17,7 +17,8 @@
         "slim/slim": "^3.10.0",
         "symfony/config": "^4.1",
         "symfony/yaml": "^4.1",
-        "doctrine/orm": "^2"
+        "doctrine/orm": "^2",
+        "dyorg/slim-token-authentication": "^0.3.3"
     },
     "autoload": {
         "psr-4": {

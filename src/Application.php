@@ -4,10 +4,12 @@ namespace Bunq\DoGood;
 
 use Bunq\DoGood\Dependency\BunqLib;
 use bunq\Util\BunqEnumApiEnvironmentType;
+
 use Slim\App;
 use Slim\Container;
 use Slim\Exception\MethodNotAllowedException;
 use Slim\Exception\NotFoundException;
+use Slim\Middleware\TokenAuthentication;
 
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\Yaml\Yaml;
@@ -45,6 +47,7 @@ class Application
 
         $this->loadDependencies();
         $this->loadControllers();
+        $this->addMiddlewares();
     }
 
     /**
@@ -130,6 +133,43 @@ class Application
 
         $config = $fileLocator->locate($name, false, false);
         return Yaml::parseFile($config[0]);
+    }
+
+
+    /**
+     * Adds the required middlewares to the slim instance
+     * @return  void
+     */
+    private function addMiddlewares() {
+
+        $entityManager = $this->getContainer()->get('entityManager');
+        $authenticator = function($request, TokenAuthentication $tokenAuth) use ($entityManager) {
+
+            // Search for token on header, parameter, cookie or attribute
+            $token = $tokenAuth->findToken($request);   
+
+            // Find account for token
+            $account = $entityManager->getRepository('Bunq\DoGood\Model\Account')->findOneBy(['api_token' => $token]);
+
+            if (!$account) {
+                $tokenAuth->setResponseMessage('Invalid token');
+            }
+
+            return $account != null;
+        };
+
+        $error = function($request, $response, TokenAuthentication $tokenAuth) {
+            return $response->withJson(['status' => 'error', 'message' => $tokenAuth->getResponseMessage()], 401);
+        };
+
+        // Add token middleware with params
+        $this->instance->add(new TokenAuthentication([
+            'path' => '/',
+            'authenticator' => $authenticator,
+            'header' => 'Api-Token',
+            'regex' => '/Bearer\s+(.*)$/i',
+            'error' => $error
+        ]));
     }
 
     /**

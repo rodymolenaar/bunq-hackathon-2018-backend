@@ -34,6 +34,11 @@ class Account
     private $bunq_data = '';
 
     /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $api_token;
+
+    /**
      * @return mixed
      */
     public function getId()
@@ -105,4 +110,19 @@ class Account
         $this->bunq_data = $bunq_data;
     }
 
+    /**
+     * @return string
+     */
+    public function getApiToken()
+    {
+        return $this->api_token;
+    }
+
+    /**
+     * @param mixed $bunq_data
+     */
+    public function setApiToken(string $api_token): void
+    {
+        $this->api_token = $api_token;
+    }
 }
