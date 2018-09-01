@@ -3,6 +3,7 @@
 namespace Bunq\DoGood;
 
 use Bunq\DoGood\Dependency\BunqLib;
+use Bunq\DoGood\Middleware\CheckBunqApiContextMiddleware;
 
 use Slim\App;
 use Slim\Container;
@@ -98,7 +99,12 @@ final class Application
         // Bunq library
         $container['bunqLib'] = function (Container $container) use ($config): BunqLib {
             $bungLib = new BunqLib();
-            $bungLib->loadContextFromJson($container['user']->getBunqDataString());
+            $apiContext = $container['user']->getBunqDataString();
+
+            if (!empty($apiContext) && $apiContext !== '""') {
+                $bungLib->loadContextFromJson($container['user']->getBunqDataString());
+            }
+
             return $bungLib;
         };
     }
@@ -171,6 +177,9 @@ final class Application
         $error = function($request, $response, TokenAuthentication $tokenAuth) {
             return $response->withJson(['status' => 'error', 'message' => $tokenAuth->getResponseMessage()], 401);
         };
+
+        // Add bunq api key checker middleware before (cuz user needs to be there)
+        $this->instance->add(new CheckBunqApiContextMiddleware($container));
 
         // Add token middleware with params
         $this->instance->add(new TokenAuthentication([

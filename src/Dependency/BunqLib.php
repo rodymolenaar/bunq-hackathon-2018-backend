@@ -8,6 +8,7 @@ use bunq\Http\Pagination;
 use bunq\Model\Generated\Endpoint\MonetaryAccountBank;
 use bunq\Model\Generated\Endpoint\Payment;
 use bunq\Util\BunqEnumApiEnvironmentType;
+use bunq\Model\Generated\Endpoint\AttachmentPublicContent;
 
 /**
  * Class BunqLib
@@ -141,5 +142,25 @@ final class BunqLib
         return count(array_filter($array, function ($elm) use ($cardPayment, $compareMethod) {
             return $compareMethod($cardPayment, $elm);
         })) > 0;
+    }
+
+    /**
+     * Fetch an PNG image for an transaction
+     *
+     * @param int $transactionId
+     * @return null|string
+     */
+    public function getMerchantImageForTransaction($transactionId) {
+        try {
+            $payment = Payment::get($transactionId)->getValue();
+            $counterpartyAlias = $payment->getCounterpartyAlias();
+            $displayName = $counterpartyAlias->getDisplayName();
+
+            $avatar = $counterpartyAlias->getAvatar()->getImage()[0];
+
+            return AttachmentPublicContent::listing($avatar->getAttachmentPublicUuid())->getValue();
+        } catch (\Exception $e) {
+            return null;
+        }
     }
 }
