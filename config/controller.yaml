@@ -14,7 +14,13 @@ controllers:
     path: '/charities'
     controller: CharityController:getList
     method:
-       - GET
+      - GET
+
+  merchants:
+    path: '/merchants'
+    controller: MerchantController:getMerchants
+    method:
+      - GET
 
   home:
     path: '/'
