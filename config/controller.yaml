@@ -5,7 +5,7 @@ controllers:
     method:
       - GET
   account_create:
-    path: '/accounts'
+    path: '/account'
     controller: AccountController:createAccount
     method:
       - POST

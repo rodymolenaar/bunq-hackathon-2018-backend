@@ -23,8 +23,16 @@ final class AccountController extends BaseController
      *
      * @return Response
      */
-    public function getAccount(Request $request, Response $response){
-        return $this->successJsonResponseMessage($response, "Email: " . $this->get('user')->getEmail());
+    public function getAccount(Request $request, Response $response) {
+        $data = ['hasApiKey' => false];
+        
+        $bunqData = $this->get('user')->getBunqData();
+        if (!empty($bunqData)) {
+            $data['hasApiKey'] = true;
+            $data['apiKey'] = $bunqData['api_key'];
+        }
+
+        return $this->successJsonResponsePayload($response, $data);
     }
 
     /**
