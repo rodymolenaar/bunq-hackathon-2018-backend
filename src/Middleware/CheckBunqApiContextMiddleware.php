@@ -19,11 +19,12 @@ class CheckBunqApiContextMiddleware {
 
         $skipRoutes = [
             '/accounts',
+            '/account',
             '/token',
         ];
 
         if (!in_array($request->getUri()->getPath(), $skipRoutes)) {
-            if (empty($apiContext) || $apiContext == '""') {
+            if (empty($bunqApiContext) || $bunqApiContext == '""') {
                 return $response->withJson(['status' => 'error', 'message' => 'bunq api key not setup'], 412);
             }
         }
