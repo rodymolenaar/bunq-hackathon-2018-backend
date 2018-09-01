@@ -21,20 +21,7 @@ final class BunqController extends BaseController
      * @return Response
      */
     public function trigger(Request $request, Response $response, array $args) {
-        $headers = $request->getHeaders();
-        $body = $request->getAttributes();
         $data = $request->getParsedBody();
-
-        $json = json_encode([
-            'headers' => $headers,
-            'body' => $body,
-            'data' => $data
-        ]) . PHP_EOL . PHP_EOL;
-
-        $path = realpath(__DIR__ . "/../../var/");
-        $file = $path . '/trigger.txt';
-
-        file_put_contents($path . '/trigger.txt', $json);
-        return;
+        $payment = $data['data']['NotificationUrl']['object']['Payment'];
     }
 }
