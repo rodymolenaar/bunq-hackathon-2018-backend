@@ -27,8 +27,8 @@ class TokenController extends BaseController
             return $this->errorJsonResponse($response, "Field 'email' missing");
         }
 
-        if (!isset($postData['email'])) {
-            return $this->errorJsonResponse($response, "Field 'email' missing");
+        if (!isset($postData['password'])) {
+            return $this->errorJsonResponse($response, "Field 'password' missing");
         }
 
         $entityManager = $this->get('entityManager');

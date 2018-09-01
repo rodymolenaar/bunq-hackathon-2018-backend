@@ -76,25 +76,11 @@ final class AccountController extends BaseController
     public function updateAccount(Request $request, Response $response, array $args) {
         $entityManager = $this->get('entityManager');
 
-        // ensure email and api_key exist
+        // ensure api_key exist
         $postData = $request->getParsedBody();
-
-        if (!isset($postData['email'])) {
-            return $this->errorJsonResponse($response, "Field 'email' missing");
-        }
 
         if (!isset($postData['api_key'])) {
             return $this->errorJsonResponse($response, "Field 'api_key' missing");
-        }
-
-        /**
-         * fetch user from db (by email)
-         * @var Account $account
-         */
-        $account = $entityManager->getRepository('Bunq\DoGood\Model\Account')->findOneBy(['email' => $postData['email']]);
-
-        if ($account === null) {
-            return $this->errorJsonResponse($response, "Account not found, check email");
         }
 
         // create api context based on api key
@@ -107,6 +93,7 @@ final class AccountController extends BaseController
         }
 
         // save context to account
+        $account = $this->get('user');
         $account->setBunqData(json_decode($context->toJson(), true));
 
         $entityManager->merge($account);

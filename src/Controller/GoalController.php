@@ -44,19 +44,9 @@ final class GoalController extends BaseController
             return $this->errorJsonResponse($response, "Field 'period' missing or invalid: " . implode(',', Goal::listPeriods()));
         }
 
-        // fetch account by email
-        if (!isset($postData['email'])) {
-            return $this->errorJsonResponse($response, "Field 'email' missing");
-        }
-
-        $account = $this->getAccountByemail($postData['email']);
-        if ($account == null) {
-            return $this->errorJsonResponse($response, 'user not found');
-        }
-
         // create new instance
         $goal = new Goal();
-        $goal->setAccount($account);
+        $goal->setAccount($this->get('user'));
         $goal->setAmount((int) $postData['amount']);
         $goal->setTransactionId((int) $postData['transaction_id']);
         $goal->setOperator($postData['operator']);
@@ -112,17 +102,5 @@ final class GoalController extends BaseController
         $id = $args['id'];
 
         return $this->successJsonResponsePayload($response, []);
-    }
-
-    /**
-     * Fetch an account by email
-     *
-     * @param string $email
-     * @return Account
-     */
-    private function getAccountByemail(string $email)
-    {
-        $entityManager = $this->get('entityManager');
-        return $entityManager->getRepository('Bunq\DoGood\Model\Account')->findOneBy(['email' => $email]);
     }
 }

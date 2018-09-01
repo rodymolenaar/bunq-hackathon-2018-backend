@@ -40,23 +40,8 @@ final class HelloController extends BaseController
     public function bank(Request $request, Response $response, array $args) {
         $postData = $request->getParsedBody();
 
-        if (!isset($postData['email'])) {
-            return $this->errorJsonResponse($response, "Field 'email' missing");
-        }
-
-        $entityManager = $this->get('entityManager');
-        $account = $entityManager->getRepository('Bunq\DoGood\Model\Account')->findOneBy(['email' => $postData['email']]);
-
-        if ($account === null) {
-            return $this->errorJsonResponse($response, "Account not found, check email");
-        }
-
-        if($account->getBunqDataString() == '""') {
-            return $this->errorJsonResponse($response, "API context missing");
-        }
-
         $bunqLib = $this->get('bunqLib');
-        $bunqLib->loadContextFromJson($account->getBunqDataString());
+        $bunqLib->loadContextFromJson($this->get('user')->getBunqDataString());
 
         $allMonetaryAccount = MonetaryAccountBank::listing()->getValue();
         $betaal = $allMonetaryAccount[0];
