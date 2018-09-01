@@ -84,7 +84,7 @@ class BunqLib
             $avatar            = $counterpartyAlias->getAvatar();
 
             return [
-                'id'          => $cardPayment->getId(),
+                'transaction_id'          => $cardPayment->getId(),
                 'name'        => $counterpartyAlias->getDisplayName(),
                 'description' => $cardPayment->getDescription(),
             ];
