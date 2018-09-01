@@ -9,7 +9,7 @@ use Slim\Http\Request;
  * Class TokenController
  * @package Bunq\DoGood\Controller
  */
-class TokenController extends BaseController
+final class TokenController extends BaseController
 {
     /**
      * Request a token

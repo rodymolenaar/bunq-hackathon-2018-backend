@@ -23,7 +23,7 @@ use Doctrine\Common\Cache\FilesystemCache;
  * Class Application
  * @package Bunq\DoGood
  */
-class Application
+final class Application
 {
     /**
      * @var App

@@ -13,7 +13,7 @@ use bunq\Util\BunqEnumApiEnvironmentType;
  * Class BunqLib
  * @package Bunq\DoGood\Dependency
  */
-class BunqLib
+final class BunqLib
 {
 
     /**
@@ -50,6 +50,44 @@ class BunqLib
         return $apiContext;
     }
 
+    /**
+     * @param string $url
+     */
+    public function setBankAccountTrigger(string $url)
+    {
+        $accountBankId = 198594;
+        $accountBank = MonetaryAccountBank::get($accountBankId)->getValue();
+
+//        $notificationFilters = $accountBank->getNotificationFilters();
+
+        $notificationFilters = [
+            'notification_delivery_method' => "URL",
+            'notification_target' => $url,
+            'category' => "PAYMENT"
+        ];
+
+        // to do: update $notificationFilters
+
+        MonetaryAccountBank::update(
+            $accountBankId,
+            $accountBank->getDescription(),
+            $accountBank->getDailyLimit(),
+            $accountBank->getAvatar()->getUuid(),
+            $accountBank->getStatus(),
+            $accountBank->getSubStatus(),
+            $accountBank->getReason(),
+            $accountBank->getReasonDescription(),
+            $notificationFilters,
+            $accountBank->getSetting(),
+            []
+        );
+    }
+
+    /**
+     * Returns an list of payment locations
+     *
+     * @return array
+     */
     public function getCardPaymentLocations()
     {
         $allMonetaryAccount   = MonetaryAccountBank::listing()->getValue();
@@ -71,9 +109,9 @@ class BunqLib
             $avatar            = $counterpartyAlias->getAvatar();
 
             return [
-                'transaction_id'          => $cardPayment->getId(),
-                'name'        => $counterpartyAlias->getDisplayName(),
-                'description' => $cardPayment->getDescription(),
+                'transaction_id'    => $cardPayment->getId(),
+                'name'              => $counterpartyAlias->getDisplayName(),
+                'description'       => $cardPayment->getDescription(),
             ];
         }, $cardPayments);
 
@@ -87,15 +125,21 @@ class BunqLib
         return $output;
     }
 
+    /**
+     * Compare the location of payments
+     *
+     * @param array $array
+     * @param $cardPayment
+     * @return bool
+     */
     private function cardPaymentLocationInArray($array, $cardPayment)
     {
-        return count(array_filter($array, function ($elm) use ($cardPayment) {
-            return $this->isSameCardPaymentLocation($cardPayment, $elm);
-        })) > 0;
-    }
+        $compareMethod = function($a, $b) {
+            return $a['name'] == $b['name'] && $a['description'] == $b['description'];
+        };
 
-    private function isSameCardPaymentLocation($a, $b)
-    {
-        return $a['name'] == $b['name'] && $a['description'] == $b['description'];
+        return count(array_filter($array, function ($elm) use ($cardPayment, $compareMethod) {
+            return $compareMethod($cardPayment, $elm);
+        })) > 0;
     }
 }

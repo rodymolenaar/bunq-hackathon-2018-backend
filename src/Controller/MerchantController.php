@@ -2,6 +2,8 @@
 
 namespace Bunq\DoGood\Controller;
 
+use bunq\Exception\BadRequestException;
+
 use Slim\Http\Request;
 use Slim\Http\Response;
 
