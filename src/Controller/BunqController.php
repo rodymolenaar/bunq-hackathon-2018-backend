@@ -12,20 +12,17 @@ use Slim\Http\Response;
 final class BunqController extends BaseController
 {
     /**
-     *
+     * Notification Filters listener
      *
      * @param Request $request
      * @param Response $response
      * @param array $args
+     *
      * @return Response
      */
-    public function currentUser(Request $request, Response $response, array $args) {
+    public function trigger(Request $request, Response $response, array $args) {
         $bunq = $this->get('bunqLib');
-        $user = $bunq->getCurrentUser();
 
-        return $this->successJsonResponsePayload($response, [
-            'id' => $user->getId(),
-            'name' => $user->getDisplayName()
-        ]);
+        return $this->successJsonResponsePayload($response, []);
     }
 }

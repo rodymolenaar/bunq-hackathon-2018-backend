@@ -23,9 +23,9 @@ final class AccountController extends BaseController
      *
      * @return Response
      */
-    public function getAccount(Request $request, Response $response) {
+    public function getAccount(Request $request, Response $response, array $args) {
         $data = ['hasApiKey' => false];
-        
+
         $bunqData = $this->get('user')->getBunqData();
         if (!empty($bunqData)) {
             $data['hasApiKey'] = true;

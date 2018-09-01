@@ -27,12 +27,17 @@ controllers:
     method:
       - GET
 
+  bunq:
+    path: '/bunq/trigger'
+    controller: BunqController:trigger
+    method:
+      - GET
+
   merchants:
     path: '/merchants'
     controller: MerchantController:getMerchants
     method:
       - GET
-
   merchant_image:
     path: '/merchants/{transaction_id}/image'
     controller: MerchantController:getMerchantImage
@@ -69,9 +74,4 @@ controllers:
     path: '/bank'
     controller: HelloController:bank
     method:
-    - POST
-  bunq:
-    path: '/bunq/user'
-    controller: BunqController:currentUser
-    method:
-    - GET
+      - POST

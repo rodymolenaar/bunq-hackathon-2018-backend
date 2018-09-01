@@ -59,15 +59,14 @@ final class BunqLib
         $accountBankId = 198594;
         $accountBank = MonetaryAccountBank::get($accountBankId)->getValue();
 
-//        $notificationFilters = $accountBank->getNotificationFilters();
+        // $notificationFilters = $accountBank->getNotificationFilters();
+        // to do check for existing records
 
         $notificationFilters = [
-            'notification_delivery_method' => "URL",
+            'notification_delivery_method' => "https://bunq-api.testservers.nl/bunq/trigger",
             'notification_target' => $url,
             'category' => "PAYMENT"
         ];
-
-        // to do: update $notificationFilters
 
         MonetaryAccountBank::update(
             $accountBankId,
