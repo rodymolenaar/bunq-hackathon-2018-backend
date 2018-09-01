@@ -31,7 +31,7 @@ controllers:
     path: '/bunq/trigger'
     controller: BunqController:trigger
     method:
-      - GET
+      - POST
 
   merchants:
     path: '/merchants'
