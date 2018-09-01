@@ -59,8 +59,6 @@ final class GoalController extends BaseController
         $entityManager->flush();
 
         return $this->successJsonResponseMessage($response, 'Goal created');
-
-        return $this->errorJsonResponse($response, 'Something went wrong while adding the goal');
     }
 
     /**
