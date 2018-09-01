@@ -22,6 +22,7 @@ final class Goal implements JsonSerializable
     /**
      * Possible period values
      */
+    const PERIOD_DAY = 'DAY';
     const PERIOD_WEEK = 'WEEK';
     const PERIOD_MONTH = 'MONTH';
     const PERIOD_YEAR = 'YEAR';

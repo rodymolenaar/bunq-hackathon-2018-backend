@@ -38,7 +38,7 @@ final class GoalController extends BaseController
         }
 
         if (!isset($postData['operator']) || !Goal::isValidOperator($postData['operator'])) {
-            return $this->errorJsonResponse($response, "Field 'condition' missing or invalid: " . implode(',', Goal::listOperators()));
+            return $this->errorJsonResponse($response, "Field 'operator' missing or invalid: " . implode(',', Goal::listOperators()));
         }
 
         if (!isset($postData['period']) || !Goal::isValidPeriod($postData['period'])) {
